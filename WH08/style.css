@@ -1,9 +1,16 @@
+/* --- 顏色變數設定區 --- */
 :root {
-    --bg: #0f1226;
-    --text: #e7e8ee;
-    --x: #ff6b6b;
-    --o: #4dd0e1;
-    --win: #ffe066;
+    /* 背景與通用文字 */
+    --bg: #1a1a2e;     /* 稍微深一點的藍紫色背景 */
+    --text: #eaeaea;   /* 淺灰白色文字 */
+    
+    /* --- 這裡修改 X 和 O 的顏色 --- */
+    --x-color: #ff4757; /* 鮮艷的紅橙色 (X) */
+    --o-color: #1e90ff; /* 明亮的天藍色 (O) */
+    
+    /* --- 這裡修改勝利時的顏色 --- */
+    --win-bg: #2ed573;    /* 勝利時格子的背景色 (翠綠色) */
+    --win-text: #ffffff;  /* 勝利時格子的文字色 (純白色) */
 }
 
 * { box-sizing: border-box; }
@@ -11,7 +18,7 @@ html, body { height: 100%; }
 
 body {
     margin: 0;
-    font-family: 'Noto Sans TC', sans-serif;
+    font-family: 'Noto Sans TC', system-ui, -apple-system, sans-serif;
     background: var(--bg);
     color: var(--text);
     display: grid;
@@ -20,53 +27,90 @@ body {
 }
 
 .container { width: min(720px, 96%); text-align: center; }
-h1 { margin: 0 0 16px 0; font-size: 24px; }
+h1 { margin: 0 0 16px 0; font-size: 24px; letter-spacing: 1px;}
 
-/* 修正1: 預留高度，避免文字出現時版面跳動 */
-.status { margin-bottom: 12px; font-size: 1.2rem; min-height: 2rem; }
+/* 狀態區預留高度 */
+.status { margin-bottom: 12px; font-size: 1.2rem; min-height: 2rem; font-weight: bold;}
+/* 讓狀態裡的 X 和 O 也跟著變色 */
+#turn { color: var(--win-bg); } 
 
+/* 棋盤本體 */
 .board {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    /* 修正2: 強制鎖定橫列高度，解決棋盤大小變動問題 */
+    /* 強制鎖定橫列高度，防止抖動 */
     grid-template-rows: repeat(3, 1fr); 
     gap: 12px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    /* 棋盤背景稍微亮一點點，增加層次感 */
+    background: rgba(255, 255, 255, 0.05);
     padding: 12px;
-    border-radius: 14px;
+    border-radius: 16px;
     width: min(560px, 92%);
     aspect-ratio: 1/1;
     margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); /* 增加一點陰影立體感 */
 }
 
+/* 棋盤格子基礎樣式 */
 .cell {
-    border-radius: 10px;
-    background: linear-gradient(180deg, #121430, #0e1030);
-    border: 1px solid rgba(255,255,255,0.03);
-    font-size: 48px;
-    font-weight: 800;
+    border-radius: 12px;
+    /* 格子預設背景：深色漸層 */
+    background: linear-gradient(145deg, #232342, #16162c);
+    border: 2px solid rgba(255,255,255,0.05);
+    font-size: 56px; /* 字體加大一點 */
+    font-weight: 900;
     display: grid;
     place-items: center;
     cursor: pointer;
     user-select: none;
-    padding: 0; /* 確保沒有內距影響大小 */
+    padding: 0;
+    transition: all 0.2s ease; /* 加入一點點動畫效果 */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
-.cell.x { color: var(--x); }
-.cell.o { color: var(--o); }
-.cell.win { background: var(--win); color: #000; }
+/* 滑鼠移過去的效果 */
+.cell:hover:not(:disabled) {
+    border-color: rgba(255,255,255,0.2);
+    background: linear-gradient(145deg, #2a2a4d, #1b1b36);
+}
 
-.scoreboard { margin-top: 16px; text-align: left; display: inline-block; }
-.scoreboard h2 { margin-bottom: 8px; font-size: 18px; }
+/* --- X 和 O 的獨立顏色設定 --- */
+.cell.x { color: var(--x-color); }
+.cell.o { color: var(--o-color); }
 
-.controls { margin-top: 12px; display: flex; gap: 10px; justify-content: center;}
+/* --- 勝利連線時的樣式設定 --- */
+/* 當格子被加上 .win 這個 class 時 (JS 控制) */
+.cell.win {
+    /* 強制改變背景色為勝利色 */
+    background: var(--win-bg) !important; 
+    /* 強制改變文字顏色為白色，對比更強烈 */
+    color: var(--win-text) !important;
+    /* 讓邊框也發光 */
+    border-color: var(--win-bg);
+    box-shadow: 0 0 20px var(--win-bg); /* 發光效果 */
+    transform: scale(1.05); /* 稍微放大一點點強調 */
+    z-index: 1;
+}
+
+.scoreboard { margin-top: 24px; text-align: left; display: inline-block; background: rgba(255,255,255,0.05); padding: 15px 25px; border-radius: 12px;}
+.scoreboard h2 { margin: 0 0 10px 0; font-size: 20px; border-bottom: 2px solid var(--win-bg); display: inline-block; padding-bottom: 5px;}
+.scoreboard p { margin: 8px 0; font-size: 16px;}
+
+.controls { margin-top: 20px; display: flex; gap: 15px; justify-content: center;}
 
 button {
-    padding: 8px 12px;
-    border-radius: 10px;
+    padding: 12px 20px;
+    border-radius: 12px;
     border: 0;
-    background: #21264a;
-    color: var(--text);
+    background: var(--win-bg); /* 按鈕使用勝利綠色 */
+    color: #000; /* 按鈕文字黑色較清楚 */
+    font-weight: bold;
+    font-size: 16px;
     cursor: pointer;
+    transition: transform 0.1s, filter 0.2s;
 }
-button:disabled { opacity: .5; cursor: not-allowed; }
+button:hover { filter: brightness(1.1); transform: translateY(-2px); }
+button:active { transform: translateY(0); }
+button:disabled { opacity: .5; cursor: not-allowed; filter: grayscale(1); transform: none;}
+/* 重置計分按鈕換個顏色區隔 */
+#reset-all { background: #ff4757; color: white; }
