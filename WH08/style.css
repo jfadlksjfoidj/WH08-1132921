@@ -52,6 +52,46 @@ h1 { margin: 0 0 16px 0; font-size: 24px; letter-spacing: 1px;}
 }
 
 /* 棋盤格子基礎樣式 */
+/* --- 定義落下動畫 (Keyframes) --- */
+@keyframes dropIn {
+    0% {
+        transform: translateY(-100px) scale(1.5); /* 從上方 100px 處開始，且稍微放大 */
+        opacity: 0; /* 一開始透明 */
+    }
+    60% {
+        transform: translateY(10px); /* 稍微撞擊過頭 (彈一下) */
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0) scale(1); /* 回到正常位置 */
+    }
+}
+
+/* --- 套用動畫到 X 和 O --- */
+.cell.x, .cell.o {
+    /* 使用剛才定義的 dropIn 動畫，時間 0.4 秒，效果為彈跳 (cubic-bezier) */
+    animation: dropIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* 確保顏色設定還在 */
+.cell.x { color: var(--x-color); }
+.cell.o { color: var(--o-color); }
+
+/* --- 勝利時的連線特效 (讓它閃爍放大) --- */
+@keyframes winPulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 var(--win-bg); }
+    50% { transform: scale(1.1); box-shadow: 0 0 20px var(--win-bg); }
+    100% { transform: scale(1.05); box-shadow: 0 0 10px var(--win-bg); }
+}
+
+.cell.win {
+    background: var(--win-bg) !important; 
+    color: var(--win-text) !important;
+    border-color: var(--win-bg);
+    z-index: 10;
+    /* 勝利時套用脈衝動畫 */
+    animation: winPulse 1s infinite alternate; 
+}
 .cell {
     border-radius: 12px;
     /* 格子預設背景：深色漸層 */
@@ -114,3 +154,4 @@ button:active { transform: translateY(0); }
 button:disabled { opacity: .5; cursor: not-allowed; filter: grayscale(1); transform: none;}
 /* 重置計分按鈕換個顏色區隔 */
 #reset-all { background: #ff4757; color: white; }
+
