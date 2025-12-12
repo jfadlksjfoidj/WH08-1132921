@@ -1,0 +1,154 @@
+/* style.css */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Roboto:wght@400;700&display=swap');
+
+body {
+    font-family: 'Roboto', "Microsoft JhengHei", sans-serif;
+    text-align: center;
+    /* 現代感漸層背景 */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    color: white;
+}
+
+h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    letter-spacing: 2px;
+}
+
+#status {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px 20px;
+    border-radius: 50px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+}
+
+/* 棋盤容器 - 毛玻璃效果 */
+.board {
+    width: 320px;
+    height: 320px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 10px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    transition: transform 0.5s;
+}
+
+/* 格子樣式 */
+.cell {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    font-size: 3.5em; /* 字體加大 */
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+    user-select: none; /* 防止被選取 */
+}
+
+.cell:hover:not(.taken) {
+    background-color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* X 和 O 的專屬顏色 */
+.cell.x {
+    color: #ff5e57; /* 紅色系 */
+    text-shadow: 0 0 5px rgba(255, 94, 87, 0.5);
+}
+
+.cell.o {
+    color: #0fbcf9; /* 藍色系 */
+    text-shadow: 0 0 5px rgba(15, 188, 249, 0.5);
+}
+
+/* 下棋時的彈出動畫 */
+.pop-in {
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    0% { transform: scale(0); opacity: 0; }
+    80% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* 按鈕樣式 */
+button {
+    margin-top: 30px;
+    padding: 12px 30px;
+    font-size: 1.2em;
+    border: none;
+    background: #fff;
+    color: #764ba2;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+/* --- 特效狀態 --- */
+
+/* 勝利連線高亮 */
+.cell.win {
+    background-color: #2ed573 !important; /* 綠色背景 */
+    color: white !important;
+    animation: winPulse 1s infinite;
+}
+
+/* 輸掉時棋盤震動 */
+.shake-board {
+    animation: shake 0.5s;
+    border: 2px solid #ff4757;
+}
+
+@keyframes winPulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 rgba(46, 213, 115, 0.7); }
+    50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(46, 213, 115, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 rgba(46, 213, 115, 0); }
+}
+
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
