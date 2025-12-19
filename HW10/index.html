@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D 極致黑白棋 (多難度版)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="victory-overlay" class="hidden">
+        <div class="victory-modal">
+            <h2 id="winner-title">黑棋獲勝！</h2>
+            <div class="final-score">
+                <span class="fs-item black">黑: <b id="end-black">32</b></span>
+                <span class="fs-item white">白: <b id="end-white">32</b></span>
+            </div>
+            <button class="btn-restart-large" onclick="closeVictoryAndRestart()">再玩一局</button>
+        </div>
+        <canvas id="confetti-canvas"></canvas>
+    </div>
+
+    <h1>3D 極致黑白棋</h1>
+
+    <div class="controls-top">
+        <label class="toggle-switch">
+            <input type="checkbox" id="chk-computer" checked>
+            <span class="slider"></span>
+            <span class="label-text">電腦對戰</span>
+        </label>
+
+        <select id="difficulty-level" class="control-select">
+            <option value="basic">基本棋力 (隨機)</option>
+            <option value="advanced" selected>進階棋力 (AI)</option>
+        </select>
+
+        <button class="btn" onclick="restartGame()">重置棋盤</button>
+    </div>
+
+    <div class="score-board">
+        <div id="p1-info" class="player-info active">
+            <div class="disc-icon black"></div>
+            <span>黑棋: <span id="score-black">2</span></span>
+        </div>
+        <div id="p2-info" class="player-info">
+            <div class="disc-icon white"></div>
+            <span>白棋: <span id="score-white">2</span></span>
+        </div>
+    </div>
+
+    <div id="status-text">輪到：黑棋</div>
+
+    <div id="game-container">
+        <div id="game-board"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
